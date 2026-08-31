@@ -1,0 +1,35 @@
+n = int(input("no.of peoples: "))
+he = []
+we = []
+for i in range(n):
+    h = float(input(f"Enter he {i + 1}: "))
+    w = float(input(f"Enter we {i + 1}: "))
+    he.append(h)
+    we.append(w)
+mean_height = sum(he) / n
+mean_weight = sum(we) / n
+print("\nMean Height =", mean_height)
+print("Mean Weight =", mean_weight)
+sum_h = 0
+for i in range(n):
+    sum_h += (he[i] - mean_height) ** 2
+vari_height = sum_h / (n - 1)
+sum_w = 0
+for i in range(n):
+    sum_w += (we[i] - mean_weight) ** 2
+vari_weight = sum_w / (n - 1)
+print("\nVariance of Height =", vari_height)
+print("Variance of Weight =", vari_weight)
+sum_hw = 0
+for i in range(n):
+    sum_hw += (
+        (he[i] - mean_height)
+        * (we[i] - mean_weight))
+covari = sum_hw / (n - 1)
+print("\nCovariance =", f"{covari:.3f}")
+covariance_matrix = [
+    [vari_height, covari],
+    [covari, vari_weight]]
+print("\nCovariance Matrix:")
+for row in covariance_matrix:
+    print(row)
