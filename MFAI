@@ -1,7 +1,6 @@
 #------------------------------------------------------
 # FIRST PROGRAM MFA --MEAN, VARIANCE AND CO-VARIANCE
 #------------------------------------------------------
-
 n = int(input("no.of peoples: "))
 he = []
 we = []
