@@ -1,0 +1,88 @@
+#--------------------------------------------------------
+'''SECOND PROGRAM OF MFA--MEAN, VARIANCE AND CO-VARIANCE USING CO-VARIANCE MATRIX 
+
+              FIND EIGN VALUE AND EIGN VECTOR AND TRANSPOSE MATRIX      '''
+#--------------------------------------------------------
+
+import math
+
+# -------------------------------------------------------------------
+# STEP 1: INPUT
+# -------------------------------------------------------------------
+n = int(input("enter your size of value: "))
+x = []
+y = []
+z = []
+for i in range(n):
+    j = float(input(f"Enter x {i + 1}: "))
+    k = float(input(f"Enter y {i + 1}: "))
+    l = float(input(f"Enter z {i + 1}: "))
+    x.append(j)
+    y.append(k)
+    z.append(l)
+
+# -------------------------------------------------------------------
+# STEP 2: MEAN
+# -------------------------------------------------------------------
+mean_X = sum(x) / n
+mean_Y = sum(y) / n
+mean_Z = sum(z) / n
+print("\nMean of X =", mean_X)
+print("Mean of Y =", mean_Y)
+print("Mean of Z =", mean_Z)
+
+# -------------------------------------------------------------------
+# STEP 3: VARIANCE
+# -------------------------------------------------------------------
+sum_x = 0
+for i in range(n):
+    sum_x += (x[i] - mean_X) ** 2
+vari_X = sum_x / (n - 1)
+
+sum_y = 0
+for i in range(n):
+    sum_y += (y[i] - mean_Y) ** 2
+vari_Y = sum_y / (n - 1)
+
+sum_z = 0
+for i in range(n):
+    sum_z += (z[i] - mean_Z) ** 2
+vari_Z = sum_z / (n - 1)
+
+print("\nVariance of X =", vari_X)
+print("Variance of Y =", vari_Y)
+print("Variance of Z =", vari_Z)
+
+# -------------------------------------------------------------------
+# STEP 4: COVARIANCE (three separate pairwise values)
+# -------------------------------------------------------------------
+sum_xy = 0
+for i in range(n):
+    sum_xy += (x[i] - mean_X) * (y[i] - mean_Y)
+covari_XY = sum_xy / (n - 1)
+
+sum_xz = 0
+for i in range(n):
+    sum_xz += (x[i] - mean_X) * (z[i] - mean_Z)
+covari_XZ = sum_xz / (n - 1)
+
+sum_yz = 0
+for i in range(n):
+    sum_yz += (y[i] - mean_Y) * (z[i] - mean_Z)
+covari_YZ = sum_yz / (n - 1)
+
+print("\nCovariance(X,Y) =", f"{covari_XY:.3f}")
+print("Covariance(X,Z) =", f"{covari_XZ:.3f}")
+print("Covariance(Y,Z) =", f"{covari_YZ:.3f}")
+
+# -------------------------------------------------------------------
+# STEP 5: BUILD THE 3x3 COVARIANCE MATRIX
+# -------------------------------------------------------------------
+covariance_matrix = [
+    [vari_X,    covari_XY, covari_XZ],
+    [covari_XY, vari_Y,    covari_YZ],
+    [covari_XZ, covari_YZ, vari_Z]]
+
+print("\nCovariance Matrix:")
+for row in covariance_matrix:
+    print(row)
