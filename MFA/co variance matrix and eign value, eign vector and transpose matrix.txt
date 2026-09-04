@@ -1,0 +1,195 @@
+#--------------------------------------------------------
+'''SECOND PROGRAM OF MFA--MEAN, VARIANCE AND CO-VARIANCE USING CO-VARIANCE MATRIX 
+
+              FIND EIGN VALUE AND EIGN VECTOR AND TRANSPOSE MATRIX      '''
+#--------------------------------------------------------
+
+import math
+
+# -------------------------------------------------------------------
+# STEP 1: INPUT
+# -------------------------------------------------------------------
+n = int(input("enter your size of value: "))
+x = []
+y = []
+z = []
+for i in range(n):
+    j = float(input(f"Enter x {i + 1}: "))
+    k = float(input(f"Enter y {i + 1}: "))
+    l = float(input(f"Enter z {i + 1}: "))
+    x.append(j)
+    y.append(k)
+    z.append(l)
+
+# -------------------------------------------------------------------
+# STEP 2: MEAN
+# -------------------------------------------------------------------
+mean_X = sum(x) / n
+mean_Y = sum(y) / n
+mean_Z = sum(z) / n
+print("\nMean of X =", mean_X)
+print("Mean of Y =", mean_Y)
+print("Mean of Z =", mean_Z)
+
+# -------------------------------------------------------------------
+# STEP 3: VARIANCE
+# -------------------------------------------------------------------
+sum_x = 0
+for i in range(n):
+    sum_x += (x[i] - mean_X) ** 2
+vari_X = sum_x / (n - 1)
+
+sum_y = 0
+for i in range(n):
+    sum_y += (y[i] - mean_Y) ** 2
+vari_Y = sum_y / (n - 1)
+
+sum_z = 0
+for i in range(n):
+    sum_z += (z[i] - mean_Z) ** 2
+vari_Z = sum_z / (n - 1)
+
+print("\nVariance of X =", vari_X)
+print("Variance of Y =", vari_Y)
+print("Variance of Z =", vari_Z)
+
+# -------------------------------------------------------------------
+# STEP 4: COVARIANCE (three separate pairwise values)
+# -------------------------------------------------------------------
+sum_xy = 0
+for i in range(n):
+    sum_xy += (x[i] - mean_X) * (y[i] - mean_Y)
+covari_XY = sum_xy / (n - 1)
+
+sum_xz = 0
+for i in range(n):
+    sum_xz += (x[i] - mean_X) * (z[i] - mean_Z)
+covari_XZ = sum_xz / (n - 1)
+
+sum_yz = 0
+for i in range(n):
+    sum_yz += (y[i] - mean_Y) * (z[i] - mean_Z)
+covari_YZ = sum_yz / (n - 1)
+
+print("\nCovariance(X,Y) =", f"{covari_XY:.3f}")
+print("Covariance(X,Z) =", f"{covari_XZ:.3f}")
+print("Covariance(Y,Z) =", f"{covari_YZ:.3f}")
+
+# -------------------------------------------------------------------
+# STEP 5: BUILD THE 3x3 COVARIANCE MATRIX
+# -------------------------------------------------------------------
+covariance_matrix = [
+    [vari_X,    covari_XY, covari_XZ],
+    [covari_XY, vari_Y,    covari_YZ],
+    [covari_XZ, covari_YZ, vari_Z]]
+
+print("\nCovariance Matrix:")
+for row in covariance_matrix:
+    print(row)
+
+# =====================================================================
+# STEP 6: TRANSPOSE OF THE COVARIANCE MATRIX
+# =====================================================================
+# Transpose swaps row-index and column-index: new[j][i] = old[i][j]
+transpose_matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   # empty 3x3 grid
+for i in range(3):
+    for j in range(3):
+        transpose_matrix[j][i] = covariance_matrix[i][j]
+
+print("\nTranspose of Covariance Matrix:")
+for row in transpose_matrix:
+    print(row)
+
+# Since covariance matrices are always symmetric, matrix == its transpose
+is_symmetric = True
+for i in range(3):
+    for j in range(3):
+        if abs(covariance_matrix[i][j] - transpose_matrix[i][j]) > 1e-9:
+            is_symmetric = False
+print("\nIs Covariance Matrix symmetric (A == A^T)?", is_symmetric)
+
+# =====================================================================
+# STEP 7: EIGENVALUES of the (symmetric) covariance matrix
+# =====================================================================
+# A real symmetric 3x3 matrix has a known closed-form trigonometric
+# solution for its eigenvalues -- no external library needed.
+a11, a12, a13 = covariance_matrix[0]
+a21, a22, a23 = covariance_matrix[1]
+a31, a32, a33 = covariance_matrix[2]
+
+trace = a11 + a22 + a33
+q = trace / 3                                    # "average" of diagonal
+
+p1 = a12 ** 2 + a13 ** 2 + a23 ** 2               # off-diagonal "mixing"
+
+if p1 == 0:
+    # Already a diagonal matrix -> eigenvalues are just the diagonal entries
+    eigenvalues = sorted([a11, a22, a33])
+else:
+    p2 = (a11 - q) ** 2 + (a22 - q) ** 2 + (a33 - q) ** 2 + 2 * p1
+    p = math.sqrt(p2 / 6)
+
+    # B = (1/p) * (A - q*I)
+    b11, b12, b13 = (a11 - q) / p, a12 / p, a13 / p
+    b21, b22, b23 = a21 / p, (a22 - q) / p, a23 / p
+    b31, b32, b33 = a31 / p, a32 / p, (a33 - q) / p
+
+    # determinant of B (manual 3x3 determinant formula)
+    detB = (b11 * (b22 * b33 - b23 * b32)
+            - b12 * (b21 * b33 - b23 * b31)
+            + b13 * (b21 * b32 - b22 * b31))
+    r = detB / 2
+    r = max(-1.0, min(1.0, r))          # clamp for floating-point safety
+
+    phi = math.acos(r) / 3
+
+    eig1 = q + 2 * p * math.cos(phi)
+    eig3 = q + 2 * p * math.cos(phi + 2 * math.pi / 3)
+    eig2 = 3 * q - eig1 - eig3          # since eig1+eig2+eig3 = trace
+
+    eigenvalues = sorted([eig1, eig2, eig3])
+
+print("\nEigenvalues:")
+for idx, val in enumerate(eigenvalues):
+    print(f"lambda_{idx + 1} =", round(val, 4))
+
+# =====================================================================
+# STEP 8: EIGENVECTORS -- solve (A - lambda*I) v = 0 for each eigenvalue
+# =====================================================================
+eigenvectors = []
+
+for lam in eigenvalues:
+    # Build (A - lambda*I)
+    m11, m12, m13 = a11 - lam, a12, a13
+    m21, m22, m23 = a21, a22 - lam, a23
+    m31, m32, m33 = a31, a32, a33 - lam
+
+    # Use rows 1 & 2 to solve for x and y in terms of z = 1
+    # m11*x + m12*y = -m13
+    # m21*x + m22*y = -m23
+    aa, bb = m11, m12
+    cc, dd = m21, m22
+    ee, ff = -m13, -m23
+
+    det = aa * dd - bb * cc
+    if abs(det) < 1e-8:
+        # rows 1,2 were degenerate -> fall back to rows 1 & 3
+        aa, bb = m11, m12
+        cc, dd = m31, m32
+        ee, ff = -m13, -m33
+        det = aa * dd - bb * cc
+
+    # Cramer's Rule for the 2x2 system
+    x_val = (ee * dd - bb * ff) / det
+    y_val = (aa * ff - ee * cc) / det
+    z_val = 1
+
+    # Normalize to unit length
+    magnitude = math.sqrt(x_val ** 2 + y_val ** 2 + z_val ** 2)
+    vec = [x_val / magnitude, y_val / magnitude, z_val / magnitude]
+    eigenvectors.append(vec)
+
+print("\nEigenvectors (unit length):")
+for idx, vec in enumerate(eigenvectors):
+    print(f"v_{idx + 1} (for lambda_{idx + 1} = {round(eigenvalues[idx], 4)}) =",
+          [round(c, 4) for c in vec])
