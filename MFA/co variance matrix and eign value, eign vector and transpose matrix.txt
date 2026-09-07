@@ -5,7 +5,6 @@
 #--------------------------------------------------------
 
 import math
-
 n = int(input("enter your size of value: "))
 x = []
 y = []
