@@ -1,14 +1,8 @@
 #--------------------------------------------------------
-'''SECOND PROGRAM OF MFA--MEAN, VARIANCE AND CO-VARIANCE USING CO-VARIANCE MATRIX 
-
-              FIND EIGN VALUE AND EIGN VECTOR AND TRANSPOSE MATRIX      '''
+'''FIRST PROGRAM OF MFA--MEAN, VARIANCE AND CO-VARIANCE'''
 #--------------------------------------------------------
 
 import math
-
-# -------------------------------------------------------------------
-# STEP 1: INPUT
-# -------------------------------------------------------------------
 n = int(input("enter your size of value: "))
 x = []
 y = []
@@ -20,20 +14,12 @@ for i in range(n):
     x.append(j)
     y.append(k)
     z.append(l)
-
-# -------------------------------------------------------------------
-# STEP 2: MEAN
-# -------------------------------------------------------------------
 mean_X = sum(x) / n
 mean_Y = sum(y) / n
 mean_Z = sum(z) / n
 print("\nMean of X =", mean_X)
 print("Mean of Y =", mean_Y)
 print("Mean of Z =", mean_Z)
-
-# -------------------------------------------------------------------
-# STEP 3: VARIANCE
-# -------------------------------------------------------------------
 sum_x = 0
 for i in range(n):
     sum_x += (x[i] - mean_X) ** 2
@@ -52,10 +38,6 @@ vari_Z = sum_z / (n - 1)
 print("\nVariance of X =", vari_X)
 print("Variance of Y =", vari_Y)
 print("Variance of Z =", vari_Z)
-
-# -------------------------------------------------------------------
-# STEP 4: COVARIANCE (three separate pairwise values)
-# -------------------------------------------------------------------
 sum_xy = 0
 for i in range(n):
     sum_xy += (x[i] - mean_X) * (y[i] - mean_Y)
@@ -75,9 +57,6 @@ print("\nCovariance(X,Y) =", f"{covari_XY:.3f}")
 print("Covariance(X,Z) =", f"{covari_XZ:.3f}")
 print("Covariance(Y,Z) =", f"{covari_YZ:.3f}")
 
-# -------------------------------------------------------------------
-# STEP 5: BUILD THE 3x3 COVARIANCE MATRIX
-# -------------------------------------------------------------------
 covariance_matrix = [
     [vari_X,    covari_XY, covari_XZ],
     [covari_XY, vari_Y,    covari_YZ],
