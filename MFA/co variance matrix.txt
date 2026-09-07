@@ -2,66 +2,41 @@
 '''FIRST PROGRAM OF MFA--MEAN, VARIANCE AND CO-VARIANCE'''
 #--------------------------------------------------------
 
-import math
-n = int(input("enter your size of value: "))
-x = []
-y = []
-z = []
+n = int(input("no.of peoples: "))
+he = []
+we = []
 for i in range(n):
-    j = float(input(f"Enter x {i + 1}: "))
-    k = float(input(f"Enter y {i + 1}: "))
-    l = float(input(f"Enter z {i + 1}: "))
-    x.append(j)
-    y.append(k)
-    z.append(l)
-mean_X = sum(x) / n
-mean_Y = sum(y) / n
-mean_Z = sum(z) / n
-print("\nMean of X =", mean_X)
-print("Mean of Y =", mean_Y)
-print("Mean of Z =", mean_Z)
-sum_x = 0
+    h = float(input(f"Enter he {i + 1}: "))
+    w = float(input(f"Enter we {i + 1}: "))
+    he.append(h)
+    we.append(w)
+mean_height = sum(he) / n
+mean_weight = sum(we) / n
+print("\nMean Height =", mean_height)
+print("Mean Weight =", mean_weight)
+sum_h = 0
 for i in range(n):
-    sum_x += (x[i] - mean_X) ** 2
-vari_X = sum_x / (n - 1)
-
-sum_y = 0
+    sum_h += (he[i] - mean_height) ** 2
+vari_height = sum_h / (n - 1)
+sum_w = 0
 for i in range(n):
-    sum_y += (y[i] - mean_Y) ** 2
-vari_Y = sum_y / (n - 1)
-
-sum_z = 0
+    sum_w += (we[i] - mean_weight) ** 2
+vari_weight = sum_w / (n - 1)
+print("\nVariance of Height =", vari_height)
+print("Variance of Weight =", vari_weight)
+sum_hw = 0
 for i in range(n):
-    sum_z += (z[i] - mean_Z) ** 2
-vari_Z = sum_z / (n - 1)
-
-print("\nVariance of X =", vari_X)
-print("Variance of Y =", vari_Y)
-print("Variance of Z =", vari_Z)
-sum_xy = 0
-for i in range(n):
-    sum_xy += (x[i] - mean_X) * (y[i] - mean_Y)
-covari_XY = sum_xy / (n - 1)
-
-sum_xz = 0
-for i in range(n):
-    sum_xz += (x[i] - mean_X) * (z[i] - mean_Z)
-covari_XZ = sum_xz / (n - 1)
-
-sum_yz = 0
-for i in range(n):
-    sum_yz += (y[i] - mean_Y) * (z[i] - mean_Z)
-covari_YZ = sum_yz / (n - 1)
-
-print("\nCovariance(X,Y) =", f"{covari_XY:.3f}")
-print("Covariance(X,Z) =", f"{covari_XZ:.3f}")
-print("Covariance(Y,Z) =", f"{covari_YZ:.3f}")
-
+    sum_hw += (
+        (he[i] - mean_height)
+        * (we[i] - mean_weight))
+covari = sum_hw / (n - 1)
+print("\nCovariance =", f"{covari:.3f}")
 covariance_matrix = [
-    [vari_X,    covari_XY, covari_XZ],
-    [covari_XY, vari_Y,    covari_YZ],
-    [covari_XZ, covari_YZ, vari_Z]]
-
+    [vari_height, covari],
+    [covari, vari_weight]]
 print("\nCovariance Matrix:")
 for row in covariance_matrix:
     print(row)
+
+
+
