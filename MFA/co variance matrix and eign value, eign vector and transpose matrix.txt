@@ -6,9 +6,6 @@
 
 import math
 
-# -------------------------------------------------------------------
-# STEP 1: INPUT
-# -------------------------------------------------------------------
 n = int(input("enter your size of value: "))
 x = []
 y = []
@@ -21,9 +18,6 @@ for i in range(n):
     y.append(k)
     z.append(l)
 
-# -------------------------------------------------------------------
-# STEP 2: MEAN
-# -------------------------------------------------------------------
 mean_X = sum(x) / n
 mean_Y = sum(y) / n
 mean_Z = sum(z) / n
@@ -31,9 +25,6 @@ print("\nMean of X =", mean_X)
 print("Mean of Y =", mean_Y)
 print("Mean of Z =", mean_Z)
 
-# -------------------------------------------------------------------
-# STEP 3: VARIANCE
-# -------------------------------------------------------------------
 sum_x = 0
 for i in range(n):
     sum_x += (x[i] - mean_X) ** 2
@@ -53,9 +44,7 @@ print("\nVariance of X =", vari_X)
 print("Variance of Y =", vari_Y)
 print("Variance of Z =", vari_Z)
 
-# -------------------------------------------------------------------
-# STEP 4: COVARIANCE (three separate pairwise values)
-# -------------------------------------------------------------------
+
 sum_xy = 0
 for i in range(n):
     sum_xy += (x[i] - mean_X) * (y[i] - mean_Y)
@@ -75,9 +64,6 @@ print("\nCovariance(X,Y) =", f"{covari_XY:.3f}")
 print("Covariance(X,Z) =", f"{covari_XZ:.3f}")
 print("Covariance(Y,Z) =", f"{covari_YZ:.3f}")
 
-# -------------------------------------------------------------------
-# STEP 5: BUILD THE 3x3 COVARIANCE MATRIX
-# -------------------------------------------------------------------
 covariance_matrix = [
     [vari_X,    covari_XY, covari_XZ],
     [covari_XY, vari_Y,    covari_YZ],
@@ -87,11 +73,7 @@ print("\nCovariance Matrix:")
 for row in covariance_matrix:
     print(row)
 
-# =====================================================================
-# STEP 6: TRANSPOSE OF THE COVARIANCE MATRIX
-# =====================================================================
-# Transpose swaps row-index and column-index: new[j][i] = old[i][j]
-transpose_matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   # empty 3x3 grid
+transpose_matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   
 for i in range(3):
     for j in range(3):
         transpose_matrix[j][i] = covariance_matrix[i][j]
@@ -108,22 +90,16 @@ for i in range(3):
             is_symmetric = False
 print("\nIs Covariance Matrix symmetric (A == A^T)?", is_symmetric)
 
-# =====================================================================
-# STEP 7: EIGENVALUES of the (symmetric) covariance matrix
-# =====================================================================
-# A real symmetric 3x3 matrix has a known closed-form trigonometric
-# solution for its eigenvalues -- no external library needed.
 a11, a12, a13 = covariance_matrix[0]
 a21, a22, a23 = covariance_matrix[1]
 a31, a32, a33 = covariance_matrix[2]
 
 trace = a11 + a22 + a33
-q = trace / 3                                    # "average" of diagonal
+q = trace / 3                                  
 
-p1 = a12 ** 2 + a13 ** 2 + a23 ** 2               # off-diagonal "mixing"
+p1 = a12 ** 2 + a13 ** 2 + a23 ** 2               
 
 if p1 == 0:
-    # Already a diagonal matrix -> eigenvalues are just the diagonal entries
     eigenvalues = sorted([a11, a22, a33])
 else:
     p2 = (a11 - q) ** 2 + (a22 - q) ** 2 + (a33 - q) ** 2 + 2 * p1
@@ -134,18 +110,18 @@ else:
     b21, b22, b23 = a21 / p, (a22 - q) / p, a23 / p
     b31, b32, b33 = a31 / p, a32 / p, (a33 - q) / p
 
-    # determinant of B (manual 3x3 determinant formula)
+   
     detB = (b11 * (b22 * b33 - b23 * b32)
             - b12 * (b21 * b33 - b23 * b31)
             + b13 * (b21 * b32 - b22 * b31))
     r = detB / 2
-    r = max(-1.0, min(1.0, r))          # clamp for floating-point safety
+    r = max(-1.0, min(1.0, r))          
 
     phi = math.acos(r) / 3
 
     eig1 = q + 2 * p * math.cos(phi)
     eig3 = q + 2 * p * math.cos(phi + 2 * math.pi / 3)
-    eig2 = 3 * q - eig1 - eig3          # since eig1+eig2+eig3 = trace
+    eig2 = 3 * q - eig1 - eig3         
 
     eigenvalues = sorted([eig1, eig2, eig3])
 
@@ -153,9 +129,6 @@ print("\nEigenvalues:")
 for idx, val in enumerate(eigenvalues):
     print(f"lambda_{idx + 1} =", round(val, 4))
 
-# =====================================================================
-# STEP 8: EIGENVECTORS -- solve (A - lambda*I) v = 0 for each eigenvalue
-# =====================================================================
 eigenvectors = []
 
 for lam in eigenvalues:
