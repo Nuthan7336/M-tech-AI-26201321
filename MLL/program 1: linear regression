@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Load dataset
+data = pd.read_csv("students_data.csv")
+x=data[['height']]
+y=data['weight']
+model=LinearRegression()
+model.fit(x,y)
+
+# slope formula: m=n * sumation of(xy)-(sumation of x)*(sumation of y) divided by n * sumation(x^2)-(sumation of(x))^2
+# intercept formula:  sumation(y) - m * sumation(x)  divided by n
+
+slope = model.coef_[0]
+intercept = model.intercept_
+
+print("--- Linear Regression Results ---")
+print(f"   Slope : {slope:.4f}")
+print(f"   Intercept: {intercept:.4f}")
+print(f"   Regression Equation: Weight = {slope:.4f} * Height + {intercept:.4f}")
+y_pred=model.predict(x)
+height=1.75
+prediction=model.predict(pd.DataFrame({'height':[height]}))
+
+print(f" predicted weight of given height {height} meters: {prediction[0]}")
+plt.scatter(x,y)
+plt.plot(x,y_pred)
+plt.xlabel('height')
+plt.ylabel('weight')
+plt.title('Linear Regression')
+plt.show()
