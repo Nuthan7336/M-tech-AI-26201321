@@ -1,32 +1,41 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
-
-# Load dataset
-data = pd.read_csv("students_data.csv")
-x=data[['height']]
-y=data['weight']
-model=LinearRegression()
-model.fit(x,y)
-
-# slope formula: m=n * sumation of(xy)-(sumation of x)*(sumation of y) divided by n * sumation(x^2)-(sumation of(x))^2
-# intercept formula:  sumation(y) - m * sumation(x)  divided by n
-
-slope = model.coef_[0]
-intercept = model.intercept_
-
-print("--- Linear Regression Results ---")
-print(f"   Slope : {slope:.4f}")
-print(f"   Intercept: {intercept:.4f}")
-print(f"   Regression Equation: Weight = {slope:.4f} * Height + {intercept:.4f}")
-y_pred=model.predict(x)
-height=1.75
-prediction=model.predict(pd.DataFrame({'height':[height]}))
-
-print(f" predicted weight of given height {height} meters: {prediction[0]}")
-plt.scatter(x,y)
-plt.plot(x,y_pred)
-plt.xlabel('height')
-plt.ylabel('weight')
-plt.title('Linear Regression')
+url = "https://raw.githubusercontent.com/raselahmed1337/Student_Performance/main/student_exam_data.csv"
+data = pd.read_csv(url)
+data = data[:200]
+print(data)
+print("Number of data:", len(data))
+x = data["Study Hours"]
+y = data["Previous Exam Score"]
+n = len(x)
+sum_x = 0
+sum_y = 0
+sum_xy = 0
+sum_x2 = 0
+for i in range(n):
+    sum_x = sum_x + x.iloc[i]
+    sum_y = sum_y + y.iloc[i]
+    sum_xy = sum_xy + (x.iloc[i] * y.iloc[i])
+    sum_x2 = sum_x2 + (x.iloc[i] * x.iloc[i])
+b1 = ((n * sum_xy) - (sum_x * sum_y)) / \
+     ((n * sum_x2) - (sum_x * sum_x))
+b0 = (sum_y - (b1 * sum_x)) / n
+print("Slope b1 =", b1)
+print("Intercept b0 =", b0)
+print("\nLinear Regression Equation:")
+print("Y =", b0, "+", b1, "* X")
+predicted_y = []
+for i in range(n):
+    y_pred = b0 + b1 * x.iloc[i]
+    predicted_y.append(y_pred)
+print("\nFirst 10 Predictions:")
+for i in range(10):
+    print("X =", x.iloc[i],
+          "Actual Y =", y.iloc[i],
+          "Predicted Y =", predicted_y[i])
+plt.scatter(x, y)
+plt.plot(x, predicted_y)
+plt.xlabel("Study Hours")
+plt.ylabel("Previous Exam Score")
+plt.title("Linear Regression using 200 Students")
 plt.show()
