@@ -1,0 +1,58 @@
+import pandas as pd
+import math
+import matplotlib.pyplot as plt
+
+def sigmoid(z):
+  return 1/(1+math.pow(math.e,-z))
+
+url="https://raw.githubusercontent.com/raselahmed1337/Student_Performance/main/student_exam_data.csv?utm_source=chatgpt.com"
+data=pd.read_csv(url)
+print(data)
+x=data['Study Hours']
+y=data['Pass/Fail']
+print(x)
+print(y)
+# print(y)
+
+a=0
+b=0
+for i in range(1000):
+  for j in range(len(x)):
+    z=a+b*x[j]
+    pred=sigmoid(z)
+    error=pred-y[j]
+    a=a-0.01*error
+    b=b-0.01*error*x[j]
+plt.scatter(x, y, label="Actual Data")
+
+# Values for sigmoid curve
+x_plot = [i / 10 for i in range(0, 101)]
+
+y_plot = []
+
+for value in x_plot:
+
+    p = sigmoid(a + b * value)
+
+    y_plot.append(p)
+
+
+# Logistic regression curve
+plt.plot(x_plot, y_plot, label="Logistic Regression")
+
+plt.xlabel("Study Hours")
+plt.ylabel("Pass / Fail Probability")
+
+plt.title("Study Hours vs Pass/Fail")
+
+plt.legend()
+plt.grid()
+
+plt.show()
+
+user_input_length=float(input("enter your "))
+pro=sigmoid(a+b*user_input_length)
+if(pro>0.5):
+  print("pass")
+else:
+  print("fail")
